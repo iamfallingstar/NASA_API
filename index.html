@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,17 +23,13 @@
         <div id='dOutput'></div>
     </div>
     <script>
-       
         //getting request from url
          var request = new XMLHttpRequest();
-
          //data array
         var apodData;
-
         // prev dates global
         var prevDate;
         var prevEndDate;
-      
          // getting data 
         function getData(){
             //get value of dates
@@ -55,7 +51,6 @@
                 alert('Date range limit is only a Month');
                 return;
             }
-
             // alert if end date is lower than start date
             if (startDate >= endDate){
 
@@ -63,24 +58,18 @@
             return;
 
             }
-
             // return if dates are not changed
             if(prevDate === startDate && prevEndDate === endDate){
                 return;
             }
-
-            
             //request to open url
             request.open("GET", 'https://api.nasa.gov/planetary/apod?api_key=4RIPEQsvrMhmXFOdqBDAk272sr9kRAdDr7a677Vf' 
             + '&start_date=' + startDate + '&end_date=' + endDate);
 
             //call function
             request.onreadystatechange=readyStateChange;
-
             //request send
             request.send();
-
-            
 
         }
 
@@ -159,10 +148,7 @@
             }
 
             output.innerHTML= outputHtml;
-
-
         }
-
     </script>
 </body>
 </html>
