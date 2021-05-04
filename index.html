@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="date-wrapper">
+    <label for="from" class="from-date">FROM</label>   
+    <input type="date" id="start-date-js" class="start-date" max="2020-06-04">
+    <label for="to" class="to-date">TO</label> 
+    <input type="date" id="end-date-js" class="end-date" max="2020-06-04">
+    </div>
+    <div class="button-wrapper">
+    <button type="button" class="get-data-button" onclick="getData();">Get Started</button>
+    </div>
+    <div class="apod-option">
+        <select id="select-apod-js" class="select-apod" onchange="displayData();">
+            <option selected disabled value=null>Please Select</option>
+        </select>
+        <div id='dOutput'></div>
+    </div>
+    <script>
+       
+        //getting request from url
+         var request = new XMLHttpRequest();
+
+         //data array
+        var apodData;
+
+        // prev dates global
+        var prevDate;
+        var prevEndDate;
+      
+         // getting data 
+        function getData(){
+            //get value of dates
+            var startDate = document.getElementById('start-date-js').value;
+            var endDate = document.getElementById('end-date-js').value;
+
+            //calculating dates for limitation
+            var msStarDate = new Date(startDate);
+            var msEndDate = new Date(endDate);
+            var msDiff = msEndDate - msStarDate;
+
+            //converting milliseconds
+            var convertDay = 8.64 * Math.pow(10,7);
+            var totalDays = msDiff / convertDay;
+
+            // Alert user for date range
+            if(totalDays > 30){
+                
+                alert('Date range limit is only a Month');
+                return;
+            }
+
+            // alert if end date is lower than start date
+            if (startDate >= endDate){
+
+            alert("end date should be greater than start date");
+            return;
+
+            }
+
+            // return if dates are not changed
+            if(prevDate === startDate && prevEndDate === endDate){
+                return;
+            }
+
+            
+            //request to open url
+            request.open("GET", 'https://api.nasa.gov/planetary/apod?api_key=4RIPEQsvrMhmXFOdqBDAk272sr9kRAdDr7a677Vf' 
+            + '&start_date=' + startDate + '&end_date=' + endDate);
+
+            //call function
+            request.onreadystatechange=readyStateChange;
+
+            //request send
+            request.send();
+
+            
+
+        }
+
+        function readyStateChange(){
+             // checking if value 4 is executed and no error
+             if (request.readyState === 4 && request.status === 200){
+
+                // comparing prev and current dates
+                console.log(prevDate);
+                 prevDate = document.getElementById("start-date-js").value;
+                 prevEndDate = document.getElementById("end-date-js").value;
+                    //response data in text (string)
+                    var apodString = request.responseText;
+                    // convert string into an object
+                    apodData = JSON.parse(request.responseText);
+                    apodDropdown();
+                    console.log(request.responseText);
+                    console.log(apodData);
+                
+             }
+             //alert user if server errors
+             if( request.readyState === 4 && request.status === 500){
+                 alert('SERVER ERROR PLEASE TRY AGAIN');
+                 return;
+             }
+
+        }
+
+        //drop down option
+        function apodDropdown(){
+
+            console.log(ddSelect);
+            console.log(dropDownData);
+
+            var ddSelect = document.getElementById('select-apod-js');
+            var dropDownData = '<option value= "-1" >Please Select</option>'; 
+          
+            for(var i = 0; i < apodData.length; i++){
+
+                dropDownData += `<option value="${i}">${apodData[i].title}</option>`;
+
+            }
+            
+            ddSelect.innerHTML = dropDownData;
+           
+
+        }
+
+        // displaying data
+        function displayData(){
+
+            var ddSelect = document.getElementById('select-apod-js');
+            var data = apodData[ddSelect.value];
+            var output = document.getElementById('dOutput');
+
+            var outputHtml="";
+
+            if(data === undefined){
+
+                return;
+            }
+
+            outputHtml +=`<p class="title">${data.title}</p></p><img src="${data.url}" alt="" style="width:50%; border:solid 5px black; display:block; margin:auto;">
+            <p>${data.explanation}</p>`;
+
+            //condition copyright
+            if(data.copyright === undefined){
+
+                outputHtml += `<p>copyright: Unknown</p>`;
+
+            }else{
+
+             outputHtml += `<p>copyright:${data.copyright}</p>`;
+
+
+            }
+
+            output.innerHTML= outputHtml;
+
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+.button-wrapper{
+    text-align: center;
+    padding-top: 5%;
+}
+
+.get-data-button{
+    border:solid 1px black;
+    background-color: black;
+    color:white;
+    text-align: center;
+
+}
+
+.date-wrapper{
+    text-align: center;
+    padding-top: 8%;
+}
+
+.start-date{
+
+    border:solid 1px black;
+  
+
+}
+
+.end-date{
+    border:solid 1px black;
+    
+}
+
+.from-date{
+    font-family: monospace, Arial, Helvetica, sans-serif;
+}
+
+.to-date{
+    font-family: monospace, Arial, Helvetica, sans-serif;
+    padding-left: 5%;
+}
+
+.title{
+    text-align: center;
+}
+
+.select-apod{
+
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    border:solid 2px black;
+}
